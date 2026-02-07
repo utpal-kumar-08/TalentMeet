@@ -5,8 +5,7 @@
   "scripts": {
     "install:all": "cd backend && bun install && cd ../frontend && bun install --ignore-scripts",
     "build": "cd frontend && bun run build",
-    "postinstall": "cd frontend && node node_modules/esbuild/install.js",
-    "start": "cd backend && bun run start",
+        "start": "cd backend && bun run start",
     "dev": "cd backend && bun run dev"
   },
   "repository": {
