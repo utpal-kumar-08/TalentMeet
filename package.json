@@ -1,0 +1,27 @@
+{
+  "name": "talentq",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "install:all": "cd backend && bun install && cd ../frontend && bun install --ignore-scripts",
+    "build": "cd frontend && bun run build",
+    "postinstall": "cd frontend && node node_modules/esbuild/install.js",
+    "start": "cd backend && bun run start",
+    "dev": "cd backend && bun run dev"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/utpal-kumar-08/TalentMeet.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/utpal-kumar-08/TalentMeet/issues"
+  },
+  "homepage": "https://github.com/utpal-kumar-08/TalentMeet#readme",
+  "description": "",
+  "dependencies": {
+    "axios": "^1.13.4"
+  }
+}
