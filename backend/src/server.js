@@ -23,6 +23,10 @@ const __dirname = path.resolve()
 console.log(ENV.DB_URL)
 console.log(ENV.PORT)
 
+app.get('/',(req,res)=>{
+  res.send("API IS RUNING")
+});
+
 app.get("/health", (req, res) => {
   res.status(200).json({ msg: "success from api" })
 })
