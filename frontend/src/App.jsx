@@ -13,16 +13,17 @@ function App() {
       <h1>Welcome to TalentQ</h1>
 
       <SignedOut>
-        <SignInButton mode="modal" />
-        <Button>Login</Button>
-        <SignUpButton mode="modal" />
-        <Button>Register</Button>
+        <SignInButton mode="modal">
+          <button>Login</button>
+        </SignInButton>
+        <SignUpButton mode="modal">
+          <button>Register</button>
+        </SignUpButton>
       </SignedOut>
 
       <SignedIn>
-        <SignedOutButton />
+        <UserButton />
       </SignedIn>
-      <UserButton />
     </>
   )
 }
