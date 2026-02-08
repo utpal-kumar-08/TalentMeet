@@ -12,6 +12,7 @@ export const connectDB=async()=>{
         console.log("✅DB connected",conn.connection.host)
     } catch (error) {
         console.log("❌DB connection error",error)
-        process.exit(1)
+        process.exit(0)
     }
 }
+
