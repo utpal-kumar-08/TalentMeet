@@ -19,7 +19,8 @@
     "inngest": "3.44.3",
     "mongoose": "^8.19.1",
     "stream-chat": "9.24.0",
-    "@clerk/backend": "^5.10.1"
+    "@clerk/backend": "^5.10.1",
+    "@clerk/express": "^5.10.1"
   },
   "devDependencies": {
     "nodemon": "^3.1.10"
