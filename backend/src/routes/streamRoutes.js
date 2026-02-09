@@ -1,18 +1,18 @@
 import express from "express";
+import { requireAuth } from "@clerk/express";
 import { chatClient } from "../lib/stream.js";
 
 const router = express.Router();
 
-// POST /api/stream/token - Generate Stream token for user
-router.post("/token", async (req, res) => {
+// POST /api/stream/token
+router.post("/token", requireAuth(), (req, res) => {
   try {
-    const { userId } = req.body;
+    const userId = req.auth.userId; // ✅ from Clerk
 
     if (!userId) {
-      return res.status(400).json({ error: "userId is required" });
+      return res.status(401).json({ error: "Unauthorized" });
     }
 
-    // Generate token for the user
     const token = chatClient.createToken(userId);
 
     res.status(200).json({ token });
