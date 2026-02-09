@@ -6,7 +6,8 @@ import {
   UserButton,
   SignedIn,
   SignedOut,
-  useUser
+  useUser,
+  useAuth,
 } from '@clerk/clerk-react'
 import { StreamChat } from 'stream-chat'
 import axios from 'axios'
@@ -16,29 +17,41 @@ const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000'
 
 function App() {
   const { user } = useUser()
+  const { getToken } = useAuth()
+
   const [streamStatus, setStreamStatus] = useState('Not connected')
   const [channelStatus, setChannelStatus] = useState('')
 
   useEffect(() => {
     if (!user) return
 
+    // ✅ Stream client MUST be here (effect scope)
+    const chatClient = StreamChat.getInstance(streamApiKey)
+
     const connectStreamUser = async () => {
       try {
-        // Initialize Stream client
-        const chatClient = StreamChat.getInstance(streamApiKey)
+        // 1️⃣ Get Clerk session token
+        const clerkToken = await getToken()
 
-        // Get token from backend
-        const response = await axios.post(`${apiUrl}/api/stream/token`, {
-          userId: user.id
-        })
+        // 2️⃣ Ask backend for Stream token (AUTHENTICATED)
+        const response = await axios.post(
+          `${apiUrl}/api/stream/token`,
+          {},
+          {
+            headers: {
+              Authorization: `Bearer ${clerkToken}`,
+            },
+          }
+        )
+
         const { token } = response.data
 
-        // Connect user to Stream
+        // 3️⃣ Connect user to Stream
         await chatClient.connectUser(
           {
             id: user.id,
             name: user.fullName || user.firstName || 'User',
-            image: user.imageUrl
+            image: user.imageUrl,
           },
           token
         )
@@ -46,27 +59,22 @@ function App() {
         console.log('✅ Stream user connected:', user.id)
         setStreamStatus(`Connected as ${user.fullName || user.firstName}`)
 
-        // Create a test channel
+        // 4️⃣ Create / watch a channel
         const channel = chatClient.channel('messaging', 'general', {
           name: 'General Chat',
-          members: [user.id]
+          members: [user.id], // add more userIds to test multi-user chat
         })
 
         await channel.watch()
-        console.log('✅ Channel created:', channel.id)
         setChannelStatus('Channel "General Chat" created')
 
-        // Send a test message
+        // 5️⃣ Send a test message
         await channel.sendMessage({
-          text: `Hello from ${user.fullName || user.firstName}! 🎉`
+          text: `Hello from ${user.fullName || user.firstName}! 🎉`,
         })
-        console.log('✅ Message sent successfully')
-        setChannelStatus('Channel created & message sent ✅')
 
-        // Cleanup on unmount
-        return () => {
-          chatClient.disconnectUser()
-        }
+        setChannelStatus('Channel created & message sent ✅')
+        console.log('✅ Message sent')
       } catch (error) {
         console.error('❌ Stream connection error:', error)
         setStreamStatus('Connection failed')
@@ -74,7 +82,13 @@ function App() {
     }
 
     connectStreamUser()
-  }, [user])
+
+    // ✅ Proper cleanup
+    return () => {
+      chatClient.disconnectUser()
+      console.log('🔌 Stream user disconnected')
+    }
+  }, [user, getToken])
 
   return (
     <>
@@ -84,6 +98,7 @@ function App() {
         <SignInButton mode="modal">
           <button>Login</button>
         </SignInButton>
+
         <SignUpButton mode="modal">
           <button>Register</button>
         </SignUpButton>
@@ -91,10 +106,24 @@ function App() {
 
       <SignedIn>
         <UserButton />
-        <div style={{ marginTop: '20px', padding: '10px', border: '1px solid #ccc' }}>
+
+        <div
+          style={{
+            marginTop: '20px',
+            padding: '10px',
+            border: '1px solid #ccc',
+            maxWidth: '400px',
+          }}
+        >
           <h3>Stream Chat Status</h3>
-          <p><strong>Connection:</strong> {streamStatus}</p>
-          {channelStatus && <p><strong>Channel:</strong> {channelStatus}</p>}
+          <p>
+            <strong>Connection:</strong> {streamStatus}
+          </p>
+          {channelStatus && (
+            <p>
+              <strong>Channel:</strong> {channelStatus}
+            </p>
+          )}
         </div>
       </SignedIn>
     </>
@@ -102,5 +131,3 @@ function App() {
 }
 
 export default App
-
-
