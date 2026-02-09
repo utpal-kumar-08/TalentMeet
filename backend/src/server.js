@@ -16,8 +16,9 @@ import { connectDB } from "./lib/db.js"
 import { inngest, functions } from "./lib/inngest.js"
 import cors from "cors"
 import {serve} from "inngest/express"
-import streamRoutes from "./routes/streamRoutes.js"
 import { clerkMiddleware } from "@clerk/express";
+import {protectRoute} from "./middleware/protectRoute.js"
+import chatRoutes from "./routes/chatRoutes.js"
 
 const app = express()
 const __dirname = path.resolve()
@@ -38,7 +39,8 @@ app.use(clerkMiddleware());
 
 
 app.use("/api/inngest", serve({ client: inngest, functions }));
-app.use("/api/stream", streamRoutes);
+
+app.use("/api/chat",chatRoutes)
 console.log(ENV.DB_URL)
 console.log(ENV.PORT)
 
@@ -50,9 +52,9 @@ app.get("/health", (req, res) => {
   res.status(200).json({ msg: "success from api" })
 })
 
-app.get("/books", (req, res) => {
-  res.status(200).json({ msg: "success from books" })
-})
+
+
+
 
 if(ENV.NODE_ENV==="production"){
   app.use(express.static(path.join(__dirname,"../frontend/dist")))
