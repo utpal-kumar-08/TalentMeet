@@ -52,18 +52,22 @@ export async function executeCode(language, code) {
 
     const output = data.run.output || "";
     const stderr = data.run.stderr || "";
+    const exitCode = data.run.code || 0;
 
-    if (stderr) {
+    // Only fail if exit code is non-zero (actual error)
+    // stderr might contain warnings that don't indicate failure
+    if (exitCode !== 0) {
       return {
         success: false,
         output: output,
-        error: stderr,
+        error: stderr || "Code execution failed with non-zero exit code",
       };
     }
 
     return {
       success: true,
       output: output || "No output",
+      error: stderr || undefined, // Include stderr for debugging but don't fail
     };
   } catch (error) {
     return {
