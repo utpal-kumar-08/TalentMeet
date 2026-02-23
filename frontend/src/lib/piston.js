@@ -15,60 +15,37 @@ const LANGUAGE_VERSIONS = {
  */
 export async function executeCode(language, code) {
   try {
-    const languageConfig = LANGUAGE_VERSIONS[language];
+    const apiUrl = import.meta.env.VITE_API_URL;
 
-    if (!languageConfig) {
+    if (!apiUrl) {
       return {
         success: false,
-        error: `Unsupported language: ${language}`,
+        error: "API URL is not configured",
       };
     }
 
-    const response = await fetch(`${PISTON_API}/execute`, {
+    const response = await fetch(`${apiUrl}/code/execute`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
+      credentials: "include", // Include cookies for authentication
       body: JSON.stringify({
-        language: languageConfig.language,
-        version: languageConfig.version,
-        files: [
-          {
-            name: `main.${getFileExtension(language)}`,
-            content: code,
-          },
-        ],
+        language,
+        code,
       }),
     });
 
     if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
       return {
         success: false,
-        error: `HTTP error! status: ${response.status}`,
+        error: errorData.error || `HTTP error! status: ${response.status}`,
       };
     }
 
     const data = await response.json();
-
-    const output = data.run.output || "";
-    const stderr = data.run.stderr || "";
-    const exitCode = data.run.code || 0;
-
-    // Only fail if exit code is non-zero (actual error)
-    // stderr might contain warnings that don't indicate failure
-    if (exitCode !== 0) {
-      return {
-        success: false,
-        output: output,
-        error: stderr || "Code execution failed with non-zero exit code",
-      };
-    }
-
-    return {
-      success: true,
-      output: output || "No output",
-      error: stderr || undefined, // Include stderr for debugging but don't fail
-    };
+    return data;
   } catch (error) {
     return {
       success: false,

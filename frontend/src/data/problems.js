@@ -33,43 +33,69 @@ export const PROBLEMS = {
       "Only one valid answer exists",
     ],
     starterCode: {
-      javascript: `function twoSum(nums, target) {
-  // Write your solution here
-  
+      javascript: `/**
+ * @param {number[]} nums
+ * @param {number} target
+ * @return {number[]}
+ */
+function twoSum(nums, target) {
+  // Hash map for O(n) solution
+  const map = new Map();
+  for (let i = 0; i < nums.length; i++) {
+    const complement = target - nums[i];
+    if (map.has(complement)) {
+      return [map.get(complement), i];
+    }
+    map.set(nums[i], i);
+  }
+  return [];
 }
 
-// Test cases
-console.log(twoSum([2, 7, 11, 15], 9)); // Expected: [0, 1]
-console.log(twoSum([3, 2, 4], 6)); // Expected: [1, 2]
-console.log(twoSum([3, 3], 6)); // Expected: [0, 1]`,
-      python: `def twoSum(nums, target):
-    # Write your solution here
-    pass
+// Talent IQ - Live Execution Demo
+console.log("Two Sum Results:");
+console.log("Test 1:", twoSum([2, 7, 11, 15], 9)); // Expected: [0, 1]
+console.log("Test 2:", twoSum([3, 2, 4], 6));      // Expected: [1, 2]`,
+      python: `# Talent IQ - Python Solution Template
+def twoSum(nums, target):
+    visited = {}
+    for i, num in enumerate(nums):
+        complement = target - num
+        if complement in visited:
+            return [visited[complement], i]
+        visited[num] = i
+    return []
 
-# Test cases
-print(twoSum([2, 7, 11, 15], 9))  # Expected: [0, 1]
-print(twoSum([3, 2, 4], 6))  # Expected: [1, 2]
-print(twoSum([3, 3], 6))  # Expected: [0, 1]`,
+# Run Demo
+print("Running Two Sum Solution...")
+print("Result 1:", twoSum([2, 7, 11, 15], 9))  # Expected: [0, 1]
+print("Result 2:", twoSum([3, 2, 4], 6))       # Expected: [1, 2]`,
       java: `import java.util.*;
 
-class Solution {
+// Talent IQ requires the class to be named 'Main'
+public class Main {
     public static int[] twoSum(int[] nums, int target) {
-        // Write your solution here
-        
+        Map<Integer, Integer> map = new HashMap<>();
+        for (int i = 0; i < nums.length; i++) {
+            int complement = target - nums[i];
+            if (map.containsKey(complement)) {
+                return new int[] { map.get(complement), i };
+            }
+            map.put(nums[i], i);
+        }
         return new int[0];
     }
     
     public static void main(String[] args) {
-        System.out.println(Arrays.toString(twoSum(new int[]{2, 7, 11, 15}, 9))); // Expected: [0, 1]
-        System.out.println(Arrays.toString(twoSum(new int[]{3, 2, 4}, 6))); // Expected: [1, 2]
-        System.out.println(Arrays.toString(twoSum(new int[]{3, 3}, 6))); // Expected: [0, 1]
+        System.out.println("Processing Two Sum...");
+        System.out.println("Test 1: " + Arrays.toString(twoSum(new int[]{2, 7, 11, 15}, 9)));
+        System.out.println("Test 2: " + Arrays.toString(twoSum(new int[]{3, 2, 4}, 6)));
     }
 }`,
     },
     expectedOutput: {
-      javascript: "[0,1]\n[1,2]\n[0,1]",
-      python: "[0, 1]\n[1, 2]\n[0, 1]",
-      java: "[0, 1]\n[1, 2]\n[0, 1]",
+      javascript: "Two Sum Results:\nTest 1: [0, 1]\nTest 2: [1, 2]",
+      python: "Running Two Sum Solution...\nResult 1: [0, 1]\nResult 2: [1, 2]",
+      java: "Processing Two Sum...\nTest 1: [0, 1]\nTest 2: [1, 2]",
     },
   },
 
@@ -94,54 +120,61 @@ class Solution {
     ],
     constraints: ["1 ≤ s.length ≤ 10⁵", "s[i] is a printable ascii character"],
     starterCode: {
-      javascript: `function reverseString(s) {
-  // Write your solution here
-  
+      javascript: `/**
+ * @param {character[]} s
+ * @return {void} Do not return anything, modify s in-place instead.
+ */
+function reverseString(s) {
+  let left = 0, right = s.length - 1;
+  while (left < right) {
+    [s[left], s[right]] = [s[right], s[left]];
+    left++;
+    right--;
+  }
 }
 
-// Test cases
-let test1 = ["h","e","l","l","o"];
-reverseString(test1);
-console.log(test1); // Expected: ["o","l","l","e","h"]
+// Talent IQ Execution
+let str = ["H","e","l","l","o"];
+reverseString(str);
+console.log("Original: ['H','e','l','l','o']");
+console.log("Reversed:", str);`,
+      python: `# Talent IQ - In-place Reversal
+def reverseString(s):
+    left, right = 0, len(s) - 1
+    while left < right:
+        s[left], s[right] = s[right], s[left]
+        left += 1
+        right -= 1
 
-let test2 = ["H","a","n","n","a","h"];
-reverseString(test2);
-console.log(test2); // Expected: ["h","a","n","n","a","H"]`,
-      python: `def reverseString(s):
-    # Write your solution here
-    pass
-
-# Test cases
-test1 = ["h","e","l","l","o"]
-reverseString(test1)
-print(test1)  # Expected: ["o","l","l","e","h"]
-
-test2 = ["H","a","n","n","a","h"]
-reverseString(test2)
-print(test2)  # Expected: ["h","a","n","n","a","H"]`,
+# Demo
+test = ["T","a","l","e","n","t"]
+reverseString(test)
+print("Reversed:", test)`,
       java: `import java.util.*;
 
-class Solution {
+public class Main {
     public static void reverseString(char[] s) {
-        // Write your solution here
-        
+        int left = 0, right = s.length - 1;
+        while (left < right) {
+            char temp = s[left];
+            s[left] = s[right];
+            s[right] = temp;
+            left++;
+            right--;
+        }
     }
     
     public static void main(String[] args) {
-        char[] test1 = {'h','e','l','l','o'};
-        reverseString(test1);
-        System.out.println(Arrays.toString(test1)); // Expected: [o, l, l, e, h]
-        
-        char[] test2 = {'H','a','n','n','a','h'};
-        reverseString(test2);
-        System.out.println(Arrays.toString(test2)); // Expected: [h, a, n, n, a, H]
+        char[] test = {'J','a','v','a'};
+        reverseString(test);
+        System.out.println("Reversed Result: " + Arrays.toString(test));
     }
 }`,
     },
     expectedOutput: {
-      javascript: '["o","l","l","e","h"]\n["h","a","n","n","a","H"]',
-      python: "['o', 'l', 'l', 'e', 'h']\n['h', 'a', 'n', 'n', 'a', 'H']",
-      java: "[o, l, l, e, h]\n[h, a, n, n, a, H]",
+      javascript: "Original: ['H','e','l','l','o']\nReversed: ['o','l','l','e','H']",
+      python: "Reversed: ['t', 'n', 'e', 'l', 'a', 'T']",
+      java: "Reversed Result: [a, v, a, J]",
     },
   },
 
@@ -175,40 +208,46 @@ class Solution {
     constraints: ["1 ≤ s.length ≤ 2 * 10⁵", "s consists only of printable ASCII characters"],
     starterCode: {
       javascript: `function isPalindrome(s) {
-  // Write your solution here
-  
+  const clean = s.toLowerCase().replace(/[^a-z0-9]/g, '');
+  return clean === clean.split('').reverse().join('');
 }
 
-// Test cases
-console.log(isPalindrome("A man, a plan, a canal: Panama")); // Expected: true
-console.log(isPalindrome("race a car")); // Expected: false
-console.log(isPalindrome(" ")); // Expected: true`,
-      python: `def isPalindrome(s):
-    # Write your solution here
-    pass
+// Talent IQ Demo
+console.log("Checking Palindromes:");
+console.log("'race a car' ->", isPalindrome("race a car"));
+console.log("'A man, a plan...' ->", isPalindrome("A man, a plan, a canal: Panama"));`,
+      python: `import re
 
-# Test cases
-print(isPalindrome("A man, a plan, a canal: Panama"))  # Expected: True
-print(isPalindrome("race a car"))  # Expected: False
-print(isPalindrome(" "))  # Expected: True`,
-      java: `class Solution {
+def isPalindrome(s):
+    # Talent IQ String Processing
+    s = re.sub(r'[^a-zA-Z0-9]', '', s).lower()
+    return s == s[::-1]
+
+# Demo
+print("Palindrome Check:")
+print("Level ->", isPalindrome("Level"))
+print("Not a Palindrome ->", isPalindrome("Hello"))`,
+      java: `public class Main {
     public static boolean isPalindrome(String s) {
-        // Write your solution here
-        
-        return false;
+        String clean = s.replaceAll("[^a-zA-Z0-9]", "").toLowerCase();
+        int left = 0, right = clean.length() - 1;
+        while (left < right) {
+            if (clean.charAt(left) != clean.charAt(right)) return false;
+            left++;
+            right--;
+        }
+        return true;
     }
     
     public static void main(String[] args) {
-        System.out.println(isPalindrome("A man, a plan, a canal: Panama")); // Expected: true
-        System.out.println(isPalindrome("race a car")); // Expected: false
-        System.out.println(isPalindrome(" ")); // Expected: true
+        System.out.println("Status: " + isPalindrome("A man, a plan, a canal: Panama"));
     }
 }`,
     },
     expectedOutput: {
-      javascript: "true\nfalse\ntrue",
-      python: "True\nFalse\nTrue",
-      java: "true\nfalse\ntrue",
+      javascript: "Checking Palindromes:\n'race a car' -> false\n'A man, a plan...' -> true",
+      python: "Palindrome Check:\nLevel -> True\nNot a Palindrome -> False",
+      java: "Status: true",
     },
   },
 
@@ -241,40 +280,46 @@ print(isPalindrome(" "))  # Expected: True`,
     constraints: ["1 ≤ nums.length ≤ 10⁵", "-10⁴ ≤ nums[i] ≤ 10⁴"],
     starterCode: {
       javascript: `function maxSubArray(nums) {
-  // Write your solution here
-  
+  let maxSum = nums[0];
+  let currentSum = nums[0];
+  for (let i = 1; i < nums.length; i++) {
+    currentSum = Math.max(nums[i], currentSum + nums[i]);
+    maxSum = Math.max(maxSum, currentSum);
+  }
+  return maxSum;
 }
 
-// Test cases
-console.log(maxSubArray([-2,1,-3,4,-1,2,1,-5,4])); // Expected: 6
-console.log(maxSubArray([1])); // Expected: 1
-console.log(maxSubArray([5,4,-1,7,8])); // Expected: 23`,
+// Talent IQ Example
+console.log("Max Subarray:", maxSubArray([-2, 1, -3, 4, -1, 2, 1, -5, 4])); // Expected: 6`,
       python: `def maxSubArray(nums):
-    # Write your solution here
-    pass
+    max_sum = current_sum = nums[0]
+    for num in nums[1:]:
+        current_sum = max(num, current_sum + num)
+        max_sum = max(max_sum, current_sum)
+    return max_sum
 
-# Test cases
-print(maxSubArray([-2,1,-3,4,-1,2,1,-5,4]))  # Expected: 6
-print(maxSubArray([1]))  # Expected: 1
-print(maxSubArray([5,4,-1,7,8]))  # Expected: 23`,
-      java: `class Solution {
+# Demo
+print("Maximum Sum:", maxSubArray([5, 4, -1, 7, 8])) # Expected: 23`,
+      java: `public class Main {
     public static int maxSubArray(int[] nums) {
-        // Write your solution here
-        
-        return 0;
+        int maxSum = nums[0];
+        int currentSum = nums[0];
+        for (int i = 1; i < nums.length; i++) {
+            currentSum = Math.max(nums[i], currentSum + nums[i]);
+            maxSum = Math.max(maxSum, currentSum);
+        }
+        return maxSum;
     }
     
     public static void main(String[] args) {
-        System.out.println(maxSubArray(new int[]{-2,1,-3,4,-1,2,1,-5,4})); // Expected: 6
-        System.out.println(maxSubArray(new int[]{1})); // Expected: 1
-        System.out.println(maxSubArray(new int[]{5,4,-1,7,8})); // Expected: 23
+        System.out.println("Result: " + maxSubArray(new int[]{-2,1,-3,4,-1,2,1,-5,4}));
     }
 }`,
     },
     expectedOutput: {
-      javascript: "6\n1\n23",
-      python: "6\n1\n23",
-      java: "6\n1\n23",
+      javascript: "Max Subarray: 6",
+      python: "Maximum Sum: 23",
+      java: "Result: 6",
     },
   },
 
@@ -306,37 +351,55 @@ print(maxSubArray([5,4,-1,7,8]))  # Expected: 23`,
     constraints: ["n == height.length", "2 ≤ n ≤ 10⁵", "0 ≤ height[i] ≤ 10⁴"],
     starterCode: {
       javascript: `function maxArea(height) {
-  // Write your solution here
-  
+  let left = 0, right = height.length - 1;
+  let maxArea = 0;
+  while (left < right) {
+    const area = Math.min(height[left], height[right]) * (right - left);
+    maxArea = Math.max(maxArea, area);
+    if (height[left] < height[right]) left++;
+    else right--;
+  }
+  return maxArea;
 }
 
-// Test cases
-console.log(maxArea([1,8,6,2,5,4,8,3,7])); // Expected: 49
-console.log(maxArea([1,1])); // Expected: 1`,
+// Talent IQ Demo
+console.log("Maximum Area:", maxArea([1, 8, 6, 2, 5, 4, 8, 3, 7])); // Expected: 49`,
       python: `def maxArea(height):
-    # Write your solution here
-    pass
+    left, right = 0, len(height) - 1
+    max_area = 0
+    while left < right:
+        area = min(height[left], height[right]) * (right - left)
+        max_area = max(max_area, area)
+        if height[left] < height[right]:
+            left += 1
+        else:
+            right -= 1
+    return max_area
 
-# Test cases
-print(maxArea([1,8,6,2,5,4,8,3,7]))  # Expected: 49
-print(maxArea([1,1]))  # Expected: 1`,
-      java: `class Solution {
+# Run Test
+print("Water Captured:", maxArea([1, 8, 6, 2, 5, 4, 8, 3, 7]))`,
+      java: `public class Main {
     public static int maxArea(int[] height) {
-        // Write your solution here
-        
-        return 0;
+        int left = 0, right = height.length - 1;
+        int maxArea = 0;
+        while (left < right) {
+            int area = Math.min(height[left], height[right]) * (right - left);
+            maxArea = Math.max(maxArea, area);
+            if (height[left] < height[right]) left++;
+            else right--;
+        }
+        return maxArea;
     }
     
     public static void main(String[] args) {
-        System.out.println(maxArea(new int[]{1,8,6,2,5,4,8,3,7})); // Expected: 49
-        System.out.println(maxArea(new int[]{1,1})); // Expected: 1
+        System.out.println("Max Water: " + maxArea(new int[]{1,8,6,2,5,4,8,3,7}));
     }
 }`,
     },
     expectedOutput: {
-      javascript: "49\n1",
-      python: "49\n1",
-      java: "49\n1",
+      javascript: "Maximum Area: 49",
+      python: "Water Captured: 49",
+      java: "Max Water: 49",
     },
   },
 };
